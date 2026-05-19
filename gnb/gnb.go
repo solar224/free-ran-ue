@@ -706,6 +706,7 @@ func (g *Gnb) processUeInitialization(ranUe *RanUe) error {
 		return fmt.Errorf("error receive ue registration request from UE: %v", err)
 	}
 	g.NasLog.Tracef("Received %d bytes of UE registration request from UE", n)
+	ueRegistrationRequest = ueRegistrationRequest[:n]
 
 	nasMessage := nas.NewMessage()
 	if err := nasMessage.GmmMessageDecode(&ueRegistrationRequest); err != nil {
