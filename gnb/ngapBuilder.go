@@ -76,8 +76,10 @@ func buildNgapSetupRequest(gnbId []byte, gnbName string, plmnId ngapType.PLMNIde
 	sliceSupportList := &broadcastPLMNItem.TAISliceSupportList
 	sliceSupportItem := ngapType.SliceSupportItem{}
 	sliceSupportItem.SNSSAI.SST.Value = aper.OctetString(snssai.SST.Value)
-	sliceSupportItem.SNSSAI.SD = new(ngapType.SD)
-	sliceSupportItem.SNSSAI.SD.Value = aper.OctetString(snssai.SD.Value)
+	if snssai.SD != nil {
+		sliceSupportItem.SNSSAI.SD = new(ngapType.SD)
+		sliceSupportItem.SNSSAI.SD.Value = aper.OctetString(snssai.SD.Value)
+	}
 
 	sliceSupportList.List = append(sliceSupportList.List, sliceSupportItem)
 
@@ -563,7 +565,7 @@ func buildPDUSessionResourceModifyIndication(amfUeNgapId, ranUeNgapId int64, pdu
 	initiatingMessage := pdu.InitiatingMessage
 	initiatingMessage.ProcedureCode.Value = ngapType.ProcedureCodePDUSessionResourceModifyIndication
 	initiatingMessage.Criticality.Value = ngapType.CriticalityPresentReject
-	
+
 	initiatingMessage.Value.Present = ngapType.InitiatingMessagePresentPDUSessionResourceModifyIndication
 	initiatingMessage.Value.PDUSessionResourceModifyIndication = new(ngapType.PDUSessionResourceModifyIndication)
 
