@@ -42,6 +42,28 @@ var testBuildNgapSetupRequestCases = []struct {
 			},
 		},
 	},
+	{
+		name:    "testBuildNgapSetupRequestWithoutSD",
+		gnbId:   []byte("\x00\x03\x14"),
+		gnbName: "gNB",
+		plmnId: ngapType.PLMNIdentity{
+			Value: aper.OctetString("\x02\xF8\x39"),
+		},
+		tai: ngapType.TAI{
+			TAC: ngapType.TAC{
+				Value: aper.OctetString("\x00\x00\x01"),
+			},
+			PLMNIdentity: ngapType.PLMNIdentity{
+				Value: aper.OctetString("\x02\xF8\x39"),
+			},
+		},
+		snssai: ngapType.SNSSAI{
+			SST: ngapType.SST{
+				Value: aper.OctetString("\x01"),
+			},
+			SD: nil,
+		},
+	},
 }
 
 func TestBuildNgapSetupRequest(t *testing.T) {

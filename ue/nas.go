@@ -371,17 +371,25 @@ func buildUlNasTransportMessage(nasMessageContainer []byte, pduSessionId uint8, 
 	}
 
 	if sNssai != nil {
-		var sdTemp [3]uint8
-		sd, err := hex.DecodeString(sNssai.Sd)
-		if err != nil {
-			return nil, fmt.Errorf("sNssai decode error: %v", err)
-		}
-
-		copy(sdTemp[:], sd)
 		ulNasTransport.SNSSAI = nasType.NewSNSSAI(nasMessage.ULNASTransportSNSSAIType)
-		ulNasTransport.SNSSAI.SetLen(4)
 		ulNasTransport.SNSSAI.SetSST(uint8(sNssai.Sst))
-		ulNasTransport.SNSSAI.SetSD(sdTemp)
+
+		if sNssai.Sd != "" {
+			var sdTemp [3]uint8
+			sd, err := hex.DecodeString(sNssai.Sd)
+			if err != nil {
+				return nil, fmt.Errorf("sNssai decode error: %v", err)
+			}
+			if len(sd) != 3 {
+				return nil, fmt.Errorf("sNssai SD length should be 3 bytes, got %d", len(sd))
+			}
+
+			copy(sdTemp[:], sd)
+			ulNasTransport.SNSSAI.SetLen(4)
+			ulNasTransport.SNSSAI.SetSD(sdTemp)
+		} else {
+			ulNasTransport.SNSSAI.SetLen(1)
+		}
 	}
 
 	ulNasTransport.SpareHalfOctetAndPayloadContainerType.SetPayloadContainerType(nasMessage.PayloadContainerTypeN1SMInfo)

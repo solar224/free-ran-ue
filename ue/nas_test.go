@@ -10,47 +10,47 @@ import (
 )
 
 var testBuildUeMobileIdentity5GSCases = []struct {
-	name     string
+	name      string
 	mccLength int
 	mncLength int
-	supi     string
-	expected nasType.MobileIdentity5GS
+	supi      string
+	expected  nasType.MobileIdentity5GS
 }{
 	{
-		name: "imsi-2089300007487",
+		name:      "imsi-2089300007487",
 		mccLength: 3,
 		mncLength: 2,
-		supi: "2089300007487",
+		supi:      "2089300007487",
 		expected: nasType.MobileIdentity5GS{
 			Len:    12,
 			Buffer: []byte{0x01, 0x02, 0xf8, 0x39, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x47, 0x78},
 		},
 	},
 	{
-		name: "imsi-208930000000001",
+		name:      "imsi-208930000000001",
 		mccLength: 3,
 		mncLength: 2,
-		supi: "208930000000001",
+		supi:      "208930000000001",
 		expected: nasType.MobileIdentity5GS{
 			Len:    13,
 			Buffer: []byte{0x01, 0x02, 0xf8, 0x39, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10},
 		},
 	},
 	{
-		name:           "imsi-001001000000001",
-		mccLength:      3,
-		mncLength:      3,
-		supi:           "001001000000001",
+		name:      "imsi-001001000000001",
+		mccLength: 3,
+		mncLength: 3,
+		supi:      "001001000000001",
 		expected: nasType.MobileIdentity5GS{
 			Len:    13,
 			Buffer: []byte{0x01, 0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf1},
 		},
 	},
 	{
-		name:           "imsi-208939000000001",
-		mccLength:      3,
-		mncLength:      3,
-		supi:           "208939000000001",
+		name:      "imsi-208939000000001",
+		mccLength: 3,
+		mncLength: 3,
+		supi:      "208939000000001",
 		expected: nasType.MobileIdentity5GS{
 			Len:    13,
 			Buffer: []byte{0x01, 0x02, 0x98, 0x39, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf1},
@@ -197,6 +197,18 @@ var testBuildUlNasTransportMessageCases = []struct {
 		sNssai: &models.Snssai{
 			Sst: 1,
 			Sd:  "010203",
+		},
+		expectedError: nil,
+	},
+	{
+		name:                "testBuildUlNasTransportMessageWithoutSD",
+		nasMessageContainer: []byte{0x7e, 0x00, 0x41, 0x79, 0x00, 0x0c, 0x01, 0x02, 0xf8, 0x39, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x47, 0x78},
+		pduSessionId:        4,
+		requestType:         0,
+		dnn:                 "internet",
+		sNssai: &models.Snssai{
+			Sst: 1,
+			Sd:  "",
 		},
 		expectedError: nil,
 	},
